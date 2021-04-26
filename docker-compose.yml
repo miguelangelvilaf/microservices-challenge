@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server/
+      dockerfile: Dockerfile
+    image: eureka:latest
+    restart: always
+    container_name: eureka
+    ports:
+      - '8761:8761'
+    networks:
+      - 'microservices-network'
+
+  zuul-service:
+    build:
+      context: ./zuul-service/
+      dockerfile: Dockerfile
+    image: zuul:latest
+    restart: always
+    container_name: zuul
+    ports:
+      - '8443:8443'
+    networks:
+      - 'microservices-network'
+    depends_on:
+      - 'eureka-server'
+    links:
+      - 'eureka-server'
+
+  rickandmorty-service:
+    build:
+      context: ./rickandmorty-microservice/
+      dockerfile: Dockerfile
+    image: rickandmorty-microservice:latest
+    restart: always
+    networks:
+      - 'microservices-network'
+    depends_on:
+      - 'eureka-server'
+    links:
+      - 'eureka-server'
+
+networks:
+  microservices-network: # We need to create a network to host the services on it so that they can communicate with each other.

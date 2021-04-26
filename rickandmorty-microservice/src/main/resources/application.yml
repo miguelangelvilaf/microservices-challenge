@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: rickandmorty-microservice
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+# Tomcat Embedded Server Configuration
+server:
+  port: 0
+
+eureka:
+  instance:
+    appname: rickandmorty-microservice
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka
+    healthcheck:
+      enabled: true

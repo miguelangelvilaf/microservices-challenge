@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: zuul-service
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+# Tomcat Embedded Server Configuration
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:zuul-keystore.jks
+    key-store-password: zuulpass
+
+# Eureka Configuration Properties
+eureka:
+  instance:
+    appname: zuul-service
+    preferIpAddress: true
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka
+
+# Zuul Configuration Properties
+zuul:
+  sslHostnameValidationEnabled: false
+  routes:
+    rickandmorty-service:
+      path: /rickandmorty-microservice/**
+      serviceId: rickandmorty-microservice
